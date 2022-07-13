@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite'
+import { defineConfig,normalizePath} from 'vite'
 import react from '@vitejs/plugin-react'
 import autoprefixer from 'autoprefixer';
+import {myVitePlugin} from "./src/plugin/index.js"
 // vite.config.ts
-import { normalizePath } from 'vite';
 // 如果类型报错，需要安装 @types/node: pnpm i @types/node -D
 import path from 'path';
 // 全局 scss 文件的路径
@@ -12,26 +12,17 @@ const variablePath = normalizePath(path.resolve('./src/variable.scss'));
 export default defineConfig({
    // 手动指定项目根目录位置
   // root: path.join(__dirname, 'src'),
-  plugins: [react()],
-  // css: {
-  //   modules: {
-  //     // 一般我们可以通过 generateScopedName 属性来对生成的类名进行自定义
-  //     // 其中，name 表示当前文件名，local 表示类名
-  //     generateScopedName: "[name]__[local]___[hash:base64:5]"
-  //   },
-  //   preprocessorOptions: {
-  //     scss: {
-  //       // additionalData 的内容会在每个 scss 文件的开头自动注入
-  //       additionalData: `@import "${variablePath}";`
-  //     }
-  //   },
-  //   postcss: {
-  //     plugins: [
-  //       autoprefixer({
-  //         // 指定目标浏览器
-  //         overrideBrowserslist: ['Chrome > 40', 'ff > 31', 'ie 11']
-  //       })
-  //     ]
-  //   }
-  // }
+  plugins: [react(),myVitePlugin({
+    id:'456',
+    name:'vite+react'
+  })],
+  resolve: {
+    // 别名配置
+    alias: {
+      '@assets': path.join(__dirname, 'src/assets'),
+      "@":path.join(__dirname,"src")
+     
+    }
+  }
+  
 })
